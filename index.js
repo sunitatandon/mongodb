@@ -291,12 +291,13 @@ var MongodbDriver = Base.extend({
       };
 
       // Get a connection to mongo
-      this.connection.connect(this.connectionString, this.options, function(err, db) {
+      this.connection.connect(function(err, client) {
 
         if(err) {
           return prCB(err);
         }
 
+        const db = client.db();
         // Callback function to return mongo records
         var callbackFunction = function(err, data) {
 
@@ -305,7 +306,7 @@ var MongodbDriver = Base.extend({
           }
 
           prCB(null, data);
-          db.close();
+          // client.close();
         };
 
         // Depending on the command, we need to use different mongo methods
@@ -556,6 +557,6 @@ exports.connect = function(config, intern, callback) {
   }
 
 
-  db = config.db || new MongoClient(new Server(host, port));
+  db = config.db || new MongoClient(mongoString, config.options);
   callback(null, new MongodbDriver(db, intern, mongoString, config.options));
 };

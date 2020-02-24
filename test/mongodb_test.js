@@ -479,7 +479,6 @@ vows
 
       "has database reference": function(err, db) {
         assert.isNotNull(db);
-        db.close();
       }
     }
   })
